@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AquaWave - Beautiful New Tab Extension</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            "aqua-bg": "#252934",
+                            "aqua-dark": "#1a1e26",
+                            "aqua-accent": "#4fc3f7",
+                            "aqua-hover": "#67b3f0",
+                            "aqua-card": "#373e4f",
+                            "aqua-border": "rgba(255, 255, 255, 0.1)",
+                        },
+                        fontFamily: {
+                            sans: ["Inter", "system-ui", "sans-serif"],
+                        },
+                        animation: {
+                            wave: "wave 10s linear infinite",
+                            fadeIn: "fadeIn 0.8s ease-out",
+                            slideUp: "slideUp 0.8s ease-out",
+                            float: "float 6s ease-in-out infinite",
+                        },
+                        keyframes: {
+                            wave: {
+                                "0%": { transform: "translateX(0)" },
+                                "100%": { transform: "translateX(-50%)" },
+                            },
+                            fadeIn: {
+                                "0%": { opacity: "0" },
+                                "100%": { opacity: "1" },
+                            },
+                            slideUp: {
+                                "0%": {
+                                    opacity: "0",
+                                    transform: "translateY(30px)",
+                                },
+                                "100%": {
+                                    opacity: "1",
+                                    transform: "translateY(0)",
+                                },
+                            },
+                            float: {
+                                "0%, 100%": { transform: "translateY(0px)" },
+                                "50%": { transform: "translateY(-20px)" },
+                            },
+                        },
+                    },
+                },
+            };
+        </script>
+        <style>
+            .wave-bg {
+                background: linear-gradient(135deg, #252934 0%, #1a1e26 100%);
+                position: relative;
+                overflow-x: hidden;
+            }
+            .wave-animation {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 200%;
+                height: 150px;
+                background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" fill="%234fc3f7" fill-opacity="0.1"></path></svg>')
+                    repeat-x;
+                animation: wave 15s linear infinite;
+                opacity: 0.3;
+            }
+            .wave-animation:nth-child(2) {
+                animation-duration: 12s;
+                animation-direction: reverse;
+                opacity: 0.2;
+            }
+            .wave-animation:nth-child(3) {
+                animation-duration: 18s;
+                opacity: 0.1;
+            }
+            .glass-effect {
+                background: rgba(55, 65, 81, 0.3);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .glow-effect {
+                box-shadow: 0 0 20px rgba(79, 195, 247, 0.3);
+            }
+
+            /* Smooth scroll animations */
+            .scroll-animate {
+                transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+
+            .scroll-animate.animate-in {
+                opacity: 1 !important;
+                transform: translateY(0) !important;
+            }
+        </style>
+    </head>
+    <body class="font-sans text-white wave-bg min-h-screen">
+        <!-- Wave Background Animation -->
+        <div class="wave-animation"></div>
+        <div class="wave-animation"></div>
+        <div class="wave-animation"></div>
+
+        <!-- Navigation -->
+        <nav class="relative z-50 p-6">
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <a href="index.html" class="flex items-center space-x-3">
+                        <div
+                            class="w-10 h-10 rounded-full flex items-center justify-center glow-effect"
+                        >
+                            <img src="./icons/logo.png" alt="Aquawave Logo" />
+                        </div>
+                        <h1
+                            class="text-2xl font-bold bg-gradient-to-r from-aqua-accent to-aqua-hover bg-clip-text text-transparent"
+                        >
+                            AquaWave
+                        </h1>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a
+                        href="https://github.com/dsouravcom/aquawave-ext"
+                        target="_blank"
+                        class="text-white/70 hover:text-white transition-colors duration-300"
+                    >
+                        <svg
+                            class="w-6 h-6"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                            />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <main class="relative z-10">
+            <section class="max-w-7xl mx-auto px-6 py-20">
+                <div class="text-center animate-fadeIn">
+                    <div class="mb-8">
+                        <div
+                            class="inline-flex items-center px-4 py-2 rounded-full glass-effect text-sm font-medium text-aqua-accent border border-aqua-accent/20"
+                        >
+                            <span
+                                class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"
+                            ></span>
+                            Privacy-First • No Tracking • 100% Local
+                        </div>
+                    </div>
+
+                    <h1
+                        class="text-5xl md:text-7xl font-bold mb-6 leading-tight"
+                    >
+                        Transform Your
+                        <span
+                            class="bg-gradient-to-r from-aqua-accent to-aqua-hover bg-clip-text text-transparent"
+                        >
+                            New Tab
+                        </span>
+                        Experience
+                    </h1>
+
+                    <p
+                        class="text-xl md:text-2xl text-white/80 mb-12 max-w-3xl mx-auto leading-relaxed"
+                    >
+                        Beautiful animated waves, customizable categories, and
+                        multiple search engines. All stored locally for complete
+                        privacy.
+                    </p>
+
+                    <!-- Dynamic Download Button -->
+                    <div
+                        class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
+                    >
+                        <button
+                            id="downloadBtn"
+                            class="group relative px-8 py-4 bg-aqua-accent hover:bg-aqua-hover text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 glow-effect flex items-center space-x-3"
+                        >
+                            <img
+                                id="downloadIcon"
+                                src="./icons/Chrome.svg"
+                                alt="Browser Icon"
+                                class="w-6 h-6"
+                            />
+                            <span id="downloadText">Download for Chrome</span>
+                        </button>
+
+                        <a
+                            href="https://github.com/dsouravcom/aquawave-ext"
+                            target="_blank"
+                            class="px-8 py-4 glass-effect hover:bg-white/10 text-white font-semibold rounded-xl transition-all duration-300 flex items-center space-x-3 border border-white/20"
+                        >
+                            <svg
+                                class="w-5 h-5"
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                                />
+                            </svg>
+                            <span>View on GitHub</span>
+                        </a>
+                    </div>
+
+                    <!-- Browser Support Icons -->
+                    <div
+                        id="browserSupportIcons"
+                        class="flex items-center justify-center space-x-6 text-white/60"
+                    >
+                        <div
+                            id="chromeIcon"
+                            class="flex items-center space-x-2"
+                        >
+                            <a
+                                class="flex items-center space-x-2"
+                                href="https://chrome.google.com/webstore/detail/aquawave/abc123"
+                                target="_blank"
+                            >
+                                <img
+                                    src="./icons/Chrome.svg"
+                                    alt="Download for Chrome"
+                                    class="w-6 h-6"
+                                />
+                                <span class="text-sm">Chrome</span>
+                            </a>
+                        </div>
+                        <div id="edgeIcon" class="flex items-center space-x-2">
+                            <a
+                                class="flex items-center space-x-2"
+                                href="https://microsoftedge.microsoft.com/addons/detail/aquawave/abc123"
+                                target="_blank"
+                            >
+                                <img
+                                    src="./icons/Edge.svg"
+                                    alt="Download for Edge"
+                                    class="w-6 h-6"
+                                />
+                                <span class="text-sm">Edge</span>
+                            </a>
+                        </div>
+                        <div
+                            id="firefoxIcon"
+                            class="flex items-center space-x-2 text-white/40"
+                        >
+                            <img
+                                src="./icons/Firefox.svg"
+                                alt="Download for Firefox"
+                                class="w-6 h-6"
+                            />
+                            <span class="text-sm">Firefox (Soon)</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section class="max-w-7xl mx-auto px-6 py-20">
+                <div
+                    class="text-center mb-16 scroll-animate opacity-0 translate-y-8"
+                >
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                        Why Choose
+                        <span class="text-aqua-accent">AquaWave</span>?
+                    </h2>
+                    <p class="text-xl text-white/80 max-w-2xl mx-auto">
+                        Experience the perfect blend of beauty, functionality,
+                        and privacy
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Feature 1 -->
+                    <div
+                        class="glass-effect rounded-2xl p-8 hover:bg-white/10 transition-all duration-300 group scroll-animate opacity-0 translate-y-8"
+                    >
+                        <div
+                            class="w-16 h-16 bg-aqua-accent/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
+                        >
+                            <svg
+                                class="w-8 h-8 text-aqua-accent"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                                />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-4">
+                            Lightning Fast
+                        </h3>
+                        <p class="text-white/70 leading-relaxed">
+                            Instant load times with optimized performance. No
+                            external dependencies for core functionality.
+                        </p>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div
+                        class="glass-effect rounded-2xl p-8 hover:bg-white/10 transition-all duration-300 group scroll-animate opacity-0 translate-y-8"
+                    >
+                        <div
+                            class="w-16 h-16 bg-aqua-accent/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
+                        >
+                            <svg
+                                class="w-8 h-8 text-aqua-accent"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                                />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-4">
+                            Privacy First
+                        </h3>
+                        <p class="text-white/70 leading-relaxed">
+                            Your data never leaves your device. No tracking, no
+                            analytics, no external data collection.
+                        </p>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div
+                        class="glass-effect rounded-2xl p-8 hover:bg-white/10 transition-all duration-300 group scroll-animate opacity-0 translate-y-8"
+                    >
+                        <div
+                            class="w-16 h-16 bg-aqua-accent/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
+                        >
+                            <svg
+                                class="w-8 h-8 text-aqua-accent"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17v4a2 2 0 002 2h4M15 7l-6 6"
+                                />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-4">
+                            Beautiful Design
+                        </h3>
+                        <p class="text-white/70 leading-relaxed">
+                            Stunning animated waves with a clean, modern
+                            interface that's easy on the eyes.
+                        </p>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div
+                        class="glass-effect rounded-2xl p-8 hover:bg-white/10 transition-all duration-300 group scroll-animate opacity-0 translate-y-8"
+                    >
+                        <div
+                            class="w-16 h-16 bg-aqua-accent/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
+                        >
+                            <svg
+                                class="w-8 h-8 text-aqua-accent"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                                />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-4">
+                            Smart Categories
+                        </h3>
+                        <p class="text-white/70 leading-relaxed">
+                            Organize your bookmarks with unlimited custom
+                            categories and expandable views.
+                        </p>
+                    </div>
+
+                    <!-- Feature 5 -->
+                    <div
+                        class="glass-effect rounded-2xl p-8 hover:bg-white/10 transition-all duration-300 group scroll-animate opacity-0 translate-y-8"
+                    >
+                        <div
+                            class="w-16 h-16 bg-aqua-accent/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
+                        >
+                            <svg
+                                class="w-8 h-8 text-aqua-accent"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-4">
+                            Multi-Search
+                        </h3>
+                        <p class="text-white/70 leading-relaxed">
+                            Switch between Google, Bing, DuckDuckGo, Yahoo,
+                            Yandex, and Baidu instantly.
+                        </p>
+                    </div>
+
+                    <!-- Feature 6 -->
+                    <div
+                        class="glass-effect rounded-2xl p-8 hover:bg-white/10 transition-all duration-300 group scroll-animate opacity-0 translate-y-8"
+                    >
+                        <div
+                            class="w-16 h-16 bg-aqua-accent/20 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
+                        >
+                            <svg
+                                class="w-8 h-8 text-aqua-accent"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"
+                                />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-4">
+                            Fully Customizable
+                        </h3>
+                        <p class="text-white/70 leading-relaxed">
+                            Personalize colors, create unlimited categories, and
+                            organize your digital workspace.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Screenshot Section -->
+            <section class="max-w-7xl mx-auto px-6 py-20">
+                <div
+                    class="text-center mb-16 scroll-animate opacity-0 translate-y-8"
+                >
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                        See It In <span class="text-aqua-accent">Action</span>
+                    </h2>
+                    <p class="text-xl text-white/80">
+                        Experience the beauty and functionality of AquaWave
+                    </p>
+                </div>
+
+                <div class="relative scroll-animate opacity-0 translate-y-8">
+                    <div class="glass-effect rounded-3xl p-8 mx-auto max-w-4xl">
+                        <img
+                            src="./icons/homescreen.png"
+                            alt="home screen screenshot"
+                            class="w-full rounded-2xl"
+                        />
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <section class="max-w-7xl mx-auto px-6 py-20">
+                <div
+                    class="glass-effect rounded-3xl p-12 text-center scroll-animate opacity-0 translate-y-8"
+                >
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                        Ready to Transform Your Browsing?
+                    </h2>
+                    <p class="text-xl text-white/80 mb-8 max-w-2xl mx-auto">
+                        Join thousands of users who have already upgraded their
+                        new tab experience with AquaWave.
+                    </p>
+
+                    <div
+                        class="flex flex-col sm:flex-row items-center justify-center gap-4"
+                    >
+                        <button
+                            id="ctaDownloadBtn"
+                            class="group relative px-8 py-4 bg-aqua-accent hover:bg-aqua-hover text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 glow-effect flex items-center space-x-3"
+                        >
+                            <img
+                                id="ctaDownloadIcon"
+                                src="./icons/Chrome.svg"
+                                alt="Browser Icon"
+                                class="w-6 h-6"
+                            />
+                            <span id="ctaDownloadText"
+                                >Download for Chrome</span
+                            >
+                        </button>
+
+                        <div class="text-white/60 text-sm">
+                            Free • No Signup Required • 100% Private
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="relative z-10 border-t border-white/10 mt-20">
+            <div class="max-w-7xl mx-auto px-6 py-12">
+                <div
+                    class="flex flex-col md:flex-row items-start md:items-center justify-between space-y-8 md:space-y-0 md:space-x-8"
+                >
+                    <div class="md:col-span-2">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div
+                                class="w-8 h-8 glow-effect rounded-full flex items-center justify-center"
+                            >
+                                <img
+                                    src="./icons/logo.png"
+                                    alt="aquawave logo"
+                                />
+                            </div>
+                            <h3 class="text-xl font-bold text-aqua-accent">
+                                AquaWave
+                            </h3>
+                        </div>
+                        <p class="text-white/70 mb-4 max-w-md">
+                            A beautiful, privacy-focused new tab extension that
+                            enhances your browsing experience with elegant
+                            design and powerful features.
+                        </p>
+                        <div class="flex space-x-4">
+                            <a
+                                href="https://github.com/dsouravcom/aquawave-ext"
+                                target="_blank"
+                                class="text-white/60 hover:text-aqua-accent transition-colors duration-300"
+                            >
+                                <svg
+                                    class="w-6 h-6"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                                    />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold mb-4">Support</h4>
+                        <ul class="space-y-2 text-white/70">
+                            <li>
+                                <a
+                                    href="https://github.com/dsouravcom/aquawave-ext/issues"
+                                    target="_blank"
+                                    class="hover:text-aqua-accent transition-colors"
+                                    >Report Issues</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/dsouravcom/aquawave-ext"
+                                    target="_blank"
+                                    class="hover:text-aqua-accent transition-colors"
+                                    >Documentation</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="privacy.html"
+                                    class="hover:text-aqua-accent transition-colors"
+                                    >Privacy Policy</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="contact.html"
+                                    class="hover:text-aqua-accent transition-colors"
+                                    >Contact Us</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div
+                    class="border-t border-white/10 mt-8 pt-8 text-center text-white/60"
+                >
+                    <p>
+                        &copy; 2025 AquaWave. Made with ❤️ by
+                        <a
+                            class="hover:text-aqua-accent"
+                            href="https://dsourav.com"
+                            >Sourav Dutta</a
+                        >. Licensed under MIT.
+                    </p>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Browser Detection & Dynamic Content Script -->
+        <script>
+            // Browser detection
+            function detectBrowser() {
+                const userAgent = navigator.userAgent;
+
+                if (
+                    userAgent.includes("Chrome") &&
+                    !userAgent.includes("Edg")
+                ) {
+                    return {
+                        name: "Chrome",
+                        icon: "./icons/Chrome.svg",
+                        url: "https://chrome.google.com/webstore/detail/aquawave/abc123",
+                        available: true,
+                    };
+                } else if (userAgent.includes("Edg")) {
+                    return {
+                        name: "Edge",
+                        icon: "./icons/Edge.svg",
+                        url: "https://microsoftedge.microsoft.com/addons/detail/aquawave/abc123",
+                        available: true,
+                    };
+                } else if (userAgent.includes("Firefox")) {
+                    return {
+                        name: "Firefox",
+                        icon: "./icons/Firefox.svg",
+                        url: "https://addons.mozilla.org/firefox/addon/aquawave/",
+                        available: false,
+                    };
+                } else {
+                    return {
+                        name: "Chrome",
+                        icon: "./icons/Chrome.svg",
+                        url: "https://chrome.google.com/webstore/detail/aquawave/abc123",
+                        available: true,
+                    };
+                }
+            }
+
+            // Update download buttons
+            function updateDownloadButtons() {
+                const browser = detectBrowser();
+                const downloadBtn = document.getElementById("downloadBtn");
+                const downloadIcon = document.getElementById("downloadIcon");
+                const downloadText = document.getElementById("downloadText");
+                const ctaDownloadBtn =
+                    document.getElementById("ctaDownloadBtn");
+                const ctaDownloadIcon =
+                    document.getElementById("ctaDownloadIcon");
+                const ctaDownloadText =
+                    document.getElementById("ctaDownloadText");
+
+                // Update main download button
+                downloadIcon.src = browser.icon;
+                downloadIcon.alt = `Download for ${browser.name}`;
+                downloadText.textContent = browser.available
+                    ? `Download for ${browser.name}`
+                    : `Coming Soon for ${browser.name}`;
+
+                // Update CTA download button
+                ctaDownloadIcon.src = browser.icon;
+                ctaDownloadIcon.alt = `Download for ${browser.name}`;
+                ctaDownloadText.textContent = browser.available
+                    ? `Download for ${browser.name}`
+                    : `Coming Soon for ${browser.name}`;
+
+                // Hide current browser icon from browser support section
+                const chromeIcon = document.getElementById("chromeIcon");
+                const edgeIcon = document.getElementById("edgeIcon");
+                const firefoxIcon = document.getElementById("firefoxIcon");
+
+                // Show all icons first
+                chromeIcon.classList.remove("hidden");
+                edgeIcon.classList.remove("hidden");
+                firefoxIcon.classList.remove("hidden");
+
+                // Hide the current browser's icon
+                if (browser.name === "Chrome") {
+                    chromeIcon.classList.add("hidden");
+                } else if (browser.name === "Edge") {
+                    edgeIcon.classList.add("hidden");
+                } else if (browser.name === "Firefox") {
+                    firefoxIcon.classList.add("hidden");
+                }
+
+                if (browser.available) {
+                    downloadBtn.onclick = () =>
+                        window.open(browser.url, "_blank");
+                    ctaDownloadBtn.onclick = () =>
+                        window.open(browser.url, "_blank");
+                    downloadBtn.classList.remove(
+                        "opacity-50",
+                        "cursor-not-allowed"
+                    );
+                    ctaDownloadBtn.classList.remove(
+                        "opacity-50",
+                        "cursor-not-allowed"
+                    );
+                } else {
+                    downloadBtn.onclick = () =>
+                        alert(
+                            `AquaWave for ${browser.name} is coming soon! Meanwhile, you can star our GitHub repository to get notified.`
+                        );
+                    ctaDownloadBtn.onclick = () =>
+                        alert(
+                            `AquaWave for ${browser.name} is coming soon! Meanwhile, you can star our GitHub repository to get notified.`
+                        );
+                    downloadBtn.classList.add(
+                        "opacity-50",
+                        "cursor-not-allowed"
+                    );
+                    ctaDownloadBtn.classList.add(
+                        "opacity-50",
+                        "cursor-not-allowed"
+                    );
+                }
+            }
+
+            // Initialize on page load
+            document.addEventListener(
+                "DOMContentLoaded",
+                updateDownloadButtons
+            );
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+                anchor.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    document
+                        .querySelector(this.getAttribute("href"))
+                        .scrollIntoView({
+                            behavior: "smooth",
+                        });
+                });
+            });
+
+            // Add scroll animations
+            const observerOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -100px 0px",
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        // Add staggered animation delay for feature cards
+                        const elements =
+                            document.querySelectorAll(".scroll-animate");
+                        const currentIndex = Array.from(elements).indexOf(
+                            entry.target
+                        );
+
+                        setTimeout(() => {
+                            entry.target.classList.add("animate-in");
+                        }, currentIndex * 10); // 10ms delay between each card
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all scroll-animate elements
+            document.addEventListener("DOMContentLoaded", () => {
+                document
+                    .querySelectorAll(".scroll-animate")
+                    .forEach((element) => {
+                        observer.observe(element);
+                    });
+            });
+        </script>
+    </body>
+</html>
